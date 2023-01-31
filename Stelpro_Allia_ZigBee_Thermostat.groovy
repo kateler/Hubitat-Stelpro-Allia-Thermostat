@@ -53,16 +53,16 @@ metadata {
         // 0x0B04 (2820): Electrical Measurement
         
         command "setOutdoorTemperature", [[name:"Temperature", type:"NUMBER"]]
-        command "setThermostatMode", [[name:"Thermostat mode*","type":"ENUM","description":"Thermostat mode to set","constraints":["heat"]]]
+        command "setThermostatMode", [[name:"Thermostat mode*","type":"ENUM","description":"Thermostat mode to set","constraints":["heat", "idle"]]]
         command "setThermostatOperatingState", [[name:"Thermostat mode*","type":"ENUM","description":"Thermostat mode to set","constraints":["heating","idle"]]]
-//        command "setThermostatFanMode", [[name:"Thermostat mode*","type":"ENUM","description":"Thermostat mode to set","constraints":["off"]]]
+        command "setThermostatFanMode", [[name:"Thermostat mode*","type":"ENUM","description":"Thermostat mode to set","constraints":["off"]]]
 
         command "increaseHeatSetpoint"
         command "decreaseHeatSetpoint"
     }
     
     preferences {
-//        input("lock", "enum", title: "Do you want to lock your thermostat's physical keypad?", options: ["No", "Yes"], defaultValue: "No", required: false, displayDuringSetup: false)
+        input("lock", "enum", title: "Do you want to lock your thermostat's physical keypad?", options: ["No", "Yes"], defaultValue: "No", required: false, displayDuringSetup: false)
 //        input("country", "enum", title: "Country (Outdoor Temperature)", options: ["Canada", "United States"], defaultValue: "Canada", required: false, displayDuringSetup: true)
 //        input("zipcode", "text", title: "ZipCode (Outdoor Temperature)", description: "[Do not use space](Blank = No Forecast)")
         input name: "logEnable", type: "bool", title: "Enable debug logging", defaultValue: true
@@ -237,8 +237,8 @@ def getFanModeMap() {[
     "00":"off",
 ]}
 def getTemperatureDisplayModeMap() { [
-    "00":"C",
-    "01":"F"
+    "00":"F",
+    "01":"C"
 ]}
 
 def getKeypadLockoutMap() { [
@@ -312,7 +312,7 @@ def increaseHeatSetpoint() {
         step = 0.5
     }
     else {
-        maxSetpoint = 86
+        maxSetpoint = 80
         step = 1
     }
 
@@ -332,7 +332,7 @@ def decreaseHeatSetpoint() {
         step = 0.5
     }
     else {
-        minSetpoint = 41
+        minSetpoint = 55
         step = 1
     }
 
@@ -399,6 +399,3 @@ def off() { setHeatingSetpoint(5) }
 def setThermostatFanMode(mode) {
      sendEvent(name:"thermostatFanMode", "off")
 }
-
-
-
